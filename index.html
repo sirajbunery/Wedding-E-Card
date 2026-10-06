@@ -762,7 +762,7 @@
   <svg class="icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M14.5 5.14v1.79c2.03 1.1 3.5 3.24 3.5 5.07s-1.47 3.97-3.5 5.07v1.79c3.03-1.21 5-4.14 5-6.86s-1.97-5.65-5-6.86z"/><path d="M16.5 12c0-1.77-.77-3.29-2-4.34v8.68c1.23-1.05 2-2.57 2-4.34z"/></svg>
   <svg class="icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M19.07 4.93l-1.41 1.41C19.1 7.79 20 9.79 20 12s-.9 4.21-2.34 5.66l1.41 1.41C20.88 17.26 22 14.76 22 12s-1.12-5.26-2.93-7.07zM16.5 12c0-1.77-.77-3.29-2-4.34v1.72c.63.74 1 1.65 1 2.62s-.37 1.88-1 2.62v1.72c1.23-1.05 2-2.57 2-4.34z"/></svg>
 </button>
-<audio id="bgm" loop preload="none">
+<audio id="bgm" loop preload="auto">
   <source src="assets/ambient-piano.mp3" type="audio/mpeg">
 </audio>
 
@@ -801,6 +801,7 @@
     envelope.classList.add('opening');
     spawnPetals();
     scheduleAutoScroll();
+    setMusicPlaying(true);
     setTimeout(()=>{
       stage.classList.add('hidden');
       heroContent.classList.add('show');
@@ -931,26 +932,27 @@
     setTimeout(()=> URL.revokeObjectURL(url), 1000);
   });
 
-  // ---- Background music toggle ----
-  // No audio file ships with this project — drop a legally-sourced ambient
-  // piano/instrumental track at assets/ambient-piano.mp3 to enable playback.
+  // ---- Background music (on by default when the envelope opens; the
+  // toggle button lets the visitor turn it back off) ----
   const bgm = document.getElementById('bgm');
   const musicToggle = document.getElementById('musicToggle');
-  musicToggle.addEventListener('click', ()=>{
-    const playing = musicToggle.classList.contains('playing');
+  function setMusicPlaying(playing){
     if (playing){
-      bgm.pause();
-      musicToggle.classList.remove('playing');
-      musicToggle.setAttribute('aria-pressed', 'false');
-    } else {
       bgm.volume = 0.35;
       bgm.play().then(()=>{
         musicToggle.classList.add('playing');
         musicToggle.setAttribute('aria-pressed', 'true');
       }).catch(()=>{
-        console.warn('Background music file not found — add assets/ambient-piano.mp3 to enable playback.');
+        console.warn('Background music file not found or blocked by the browser — add assets/ambient-piano.mp3, or tap the music button to retry.');
       });
+    } else {
+      bgm.pause();
+      musicToggle.classList.remove('playing');
+      musicToggle.setAttribute('aria-pressed', 'false');
     }
+  }
+  musicToggle.addEventListener('click', ()=>{
+    setMusicPlaying(!musicToggle.classList.contains('playing'));
   });
 
   // ---- Day/night theme: auto-detects from local clock time (6am-6pm =

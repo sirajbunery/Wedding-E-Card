@@ -44,7 +44,8 @@
   body.urdu .card-inner .names,
   body.urdu .details-title,
   body.urdu .event-card h3,
-  body.urdu .contact-name{
+  body.urdu .contact-name,
+  body.urdu .parents-line .parent-name{
     font-family:'Noto Nastaliq Urdu', serif;
     font-style:normal;
   }
@@ -289,6 +290,16 @@
     font-size:.42em;
     color:var(--wine);
     margin:.1em 0;
+  }
+  .parents-line .parent-name{
+    display:block;
+    font-family:'Pinyon Script', cursive;
+    font-size:clamp(2.2rem,7.6vw,3.6rem);
+    font-weight:400;
+    text-transform:none;
+    letter-spacing:0;
+    color:var(--bottle);
+    margin-top:.2rem;
   }
   .parents-line{
     margin-bottom:1.3rem;
@@ -551,6 +562,7 @@
   body.dark .name-block{ color:var(--ivory); }
   body.dark .name-block .amp{ color:var(--gold-light); }
   body.dark .parents-line{ color:#a9a494; }
+  body.dark .parents-line .parent-name{ color:var(--ivory); }
   body.dark .date-row{ color:var(--ivory); }
   body.dark .date-num{ color:var(--gold-light); }
   body.dark .year{ color:#9b9686; }
@@ -643,7 +655,10 @@
       <path d="M0 7 H45 M75 7 H120" stroke="#C8A560" stroke-width="1"/>
       <path d="M50 7 L60 2 L70 7 L60 12 Z" fill="#C8A560"/>
     </svg>
-    <div class="parents-line seq-5" data-en="Sons of Mr. Dawar Khan" data-ur="فرزندانِ جناب داور خان">Sons of Mr. Dawar Khan</div>
+    <div class="parents-line seq-5">
+      <span data-en="Sons of" data-ur="فرزندانِ">Sons of</span>
+      <strong class="parent-name" data-en="Mr. Dawar Khan" data-ur="جناب داور خان">Mr. Dawar Khan</strong>
+    </div>
     <div class="date-row">
       <span class="line seq-6"></span>
       <span class="seq-6 day" data-en="Sunday" data-ur="اتوار">Sunday</span>

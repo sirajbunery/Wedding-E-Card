@@ -645,7 +645,7 @@
 
   <div class="hero-content" id="heroContent">
     <div class="eyebrow seq-1" data-en="With the blessings of the Almighty" data-ur="اللہ تعالیٰ کے فضل و کرم سے">With the blessings of the Almighty</div>
-    <div class="invite-line seq-2" data-en="We are pleased to invite you to the wedding of" data-ur="ہمیں خوشی ہے کہ ہم آپ کو اس شادی کی تقریب میں مدعو کر رہے ہیں">We are pleased to invite you to the wedding of</div>
+    <div class="invite-line seq-2" data-en="We request the honour of your gracious presence at the wedding of" data-ur="ہم بصد احترام آپ کی شرکت کی سعادت کے طلبگار ہیں">We request the honour of your gracious presence at the wedding of</div>
     <div class="name-block seq-3">
       <span data-en="Waqar Ahmad" data-ur="وقار احمد">Waqar Ahmad</span>
       <span class="amp" data-en="&amp;" data-ur="اور">&amp;</span>
@@ -692,13 +692,13 @@
 
     <div class="events">
       <div class="event-card reveal">
-        <div class="tag" data-en="Nikah &amp; Walima" data-ur="نکاح و ولیمہ">Nikah &amp; Walima</div>
+        <div class="tag" data-en="Walima" data-ur="ولیمہ">Walima</div>
         <h3 data-en="The Celebration" data-ur="جشن">The Celebration</h3>
         <p>
           <span data-en="Kingargali" data-ur="کنگر گلی">Kingargali</span><br>
           <span data-en="District Buner, KPK" data-ur="ضلع بونیر، خیبر پختونخوا">District Buner, KPK</span>
         </p>
-        <div class="time" data-en="9:00 AM Onwards" data-ur="صبح 9:00 بجے سے">9:00 AM Onwards</div>
+        <div class="time" data-en="9:00 AM &ndash; 12:00 AM" data-ur="صبح 9:00 بجے تا رات 12:00 بجے">9:00 AM &ndash; 12:00 AM</div>
 
         <div class="event-actions">
           <a class="map-pin" href="https://maps.app.goo.gl/vUmsrVcuY6kJsXky7?g_st=ic" target="_blank" rel="noopener noreferrer">
@@ -748,7 +748,7 @@
 </section>
 
 <footer>
-  <span data-en="Made with love" data-ur="محبت کے ساتھ">Made with love</span> &middot; <span data-en="The Khan Family" data-ur="خان خاندان">The Khan Family</span>
+  <span data-en="Made with love" data-ur="محبت کے ساتھ">Made with love</span>
 </footer>
 
 <button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">اردو</button>
@@ -886,7 +886,7 @@
 
   // ---- Countdown + Add to Calendar (keep these two in sync with the displayed event time) ----
   const WEDDING_START = new Date('2026-10-25T09:00:00+05:00');
-  const WEDDING_END = new Date('2026-10-25T14:00:00+05:00');
+  const WEDDING_END = new Date('2026-10-26T00:00:00+05:00');
 
   function pad(n){ return String(n).padStart(2,'0'); }
   let countdownInterval;
@@ -919,7 +919,7 @@
       'DTEND:' + toICSDate(WEDDING_END),
       'SUMMARY:Waqar & Siraj\'s Wedding',
       'LOCATION:Kingargali, District Buner, KPK, Pakistan',
-      'DESCRIPTION:Nikah & Walima celebration of Waqar Ahmad & Siraj Ahmad Khan.',
+      'DESCRIPTION:Walima celebration of Waqar Ahmad & Siraj Ahmad Khan.',
       'END:VEVENT','END:VCALENDAR'
     ].join('\r\n');
     const url = URL.createObjectURL(new Blob([ics], { type:'text/calendar' }));
@@ -938,7 +938,7 @@
   const musicToggle = document.getElementById('musicToggle');
   function setMusicPlaying(playing){
     if (playing){
-      bgm.volume = 0.35;
+      bgm.volume = 0.2;
       bgm.play().then(()=>{
         musicToggle.classList.add('playing');
         musicToggle.setAttribute('aria-pressed', 'true');

@@ -26,6 +26,24 @@
     --theme-x:50%;
     --theme-y:50%;
     --theme-r:0px;
+
+    /* ==================================================================
+       [BORDER TWEAK] PHONE BORDER SETTINGS  <-- EDIT THESE TWO VALUES
+       Only used on phones (screens 600px wide or less), and only for
+       PAGE 1 (hero). Page 2 has its own settings, see the block
+       "[BORDER TWEAK] PAGE 2" near the bottom of this <style>.
+       Desktop / laptop is NOT affected.
+
+       --arch-mobile-width : how wide the border drawing is compared to the
+                             screen. Bigger = border pushed further to the
+                             edges = more room for text. (100% = old look)
+       --arch-mobile-left  : must always be minus half of the extra width
+                             so the border stays centered.
+                             Formula: -( width - 100% ) / 2
+                             118% -> -9%   |   124% -> -12%   |   112% -> -6%
+       ================================================================== */
+    --arch-mobile-width:118%;
+    --arch-mobile-left:-9%;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html{ scroll-behavior:smooth; }
@@ -601,6 +619,108 @@ body.urdu #details.walima-details .details-eyebrow,body.urdu #details.walima-det
   #hero { padding-left:12vw; padding-right:12vw; }
 }
 
+/* ======================================================================
+   [BORDER TWEAK] MOBILE BORDER  (the only CSS block added for the fix)
+   ----------------------------------------------------------------------
+   Why it looked awkward on phones: the arch is drawn in a wide 1200x1000
+   box and squeezed into a tall, narrow phone screen, so the side lines
+   sat very close to the text.
+
+   Fix: on phones only, make the arch drawing wider than the screen and
+   center it. The side lines move out toward the screen edges, so the
+   text gets more room. The parts that go past the edge are clipped
+   (#hero and #details already have overflow:hidden).
+
+   Laptop / desktop (screens wider than 600px) are NOT touched.
+   To adjust: change --arch-mobile-width and --arch-mobile-left at the top
+   of this file (search for "[BORDER TWEAK]").
+   ====================================================================== */
+@media(max-width:600px) {
+  /* [BORDER TWEAK] PAGE 1 (hero): wider + centered border drawing */
+  #hero .hero-decoration {
+    width:var(--arch-mobile-width);
+    left:var(--arch-mobile-left);
+    right:auto; /* needed so it also works in Urdu (right-to-left) mode */
+  }
+  /* [BORDER TWEAK] PAGE 1 (hero): keep line thickness even on phones */
+  .hero-decoration .arch-line-main { vector-effect:non-scaling-stroke; stroke-width:1px; }
+  .hero-decoration .arch-line-inner { vector-effect:non-scaling-stroke; stroke-width:.6px; }
+}
+
+/* ======================================================================
+   [BORDER TWEAK] PAGE 2 (Walima / details) MOBILE BORDER
+   ----------------------------------------------------------------------
+   This page is much taller than the screen, so the stretched SVG arch got
+   squeezed and its curved "shoulders" cut through the text.
+   On phones only, we hide the SVG arch lines of this page and draw a
+   simple arch with plain CSS instead (it never stretches, so the curve
+   stays clear of the text). The faint diamond pattern in the background
+   still comes from the SVG.
+   Desktop / laptop still uses the original SVG arch.
+
+   EDIT HERE:
+   - side gap of the border from the screen edge : left / right (10px)
+   - roundness of the top curve                  : border-radius (120px)
+   - space above the first text line             : padding-top (100px)
+   - space between border and text (sides)       : padding left/right (34px)
+   ====================================================================== */
+@media(max-width:600px) {
+  /* [BORDER TWEAK] page 2: hide the old SVG arch lines on phones */
+  #details .details-arch-fill,
+  #details .details-decoration .arch-line-main,
+  #details .details-decoration .arch-line-inner { display:none; }
+
+  /* [BORDER TWEAK] page 2: the new CSS arch (outer gold line + thin inner line) */
+  #details.walima-details::after{
+    content:"";
+    position:absolute;
+    top:20px; bottom:0;
+    left:10px; right:10px;              /* [BORDER TWEAK] gap from screen edge */
+    border:1px solid var(--gold);
+    border-bottom:none;
+    border-radius:120px 120px 0 0;      /* [BORDER TWEAK] top curve roundness */
+    background:var(--bottle-deep);      /* covers the pattern inside the arch */
+    /* thin inner line, 5px inside the outer one */
+    box-shadow:
+      inset 0 0 0 5px var(--bottle-deep),
+      inset 0 0 0 6px rgba(200,165,96,.55);
+    pointer-events:none;
+    z-index:0;
+  }
+  /* [BORDER TWEAK] page 2: keep text clear of the curve */
+  #details.walima-details { padding:100px 34px 36px; }
+}
+
+/* ======================================================================
+   [CARD SIZE] PAGE 2 (Walima card) - SMALLER SIZE ON PHONES
+   ----------------------------------------------------------------------
+   Makes the card, fonts, spacing and buttons smaller on phones only
+   (screens 600px wide or less) so less scrolling is needed.
+   Laptop / desktop is NOT affected.
+   To make it even smaller, lower the numbers. To make it bigger, raise them.
+   ====================================================================== */
+@media(max-width:600px) {
+  /* [CARD SIZE] "Walima Reception" heading */
+  #details.walima-details .details-title { font-size:1.9rem; margin:12px 0 22px; }
+  /* [CARD SIZE] space inside the card */
+  #details.walima-details .event-card { padding:18px 14px 20px; }
+  /* [CARD SIZE] "WALIMA" pill and "VENUE" text */
+  #details.walima-details .event-card .tag { font-size:15px; padding:4px 22px; }
+  #details.walima-details .event-card .venue-title { font-size:15px; margin:18px 0 10px; }
+  /* [CARD SIZE] venue address lines */
+  #details.walima-details .event-card p { font-size:1rem; line-height:1.6; }
+  /* [CARD SIZE] time text */
+  #details.walima-details .event-card .time { font-size:1.1rem; }
+  /* [CARD SIZE] gap around the diamond dividers */
+  #details .walima-divider { margin:10px auto; }
+  /* [CARD SIZE] Google Maps / Add to Calendar buttons */
+  #details.walima-details .event-actions { gap:10px; margin-top:14px; }
+  #details.walima-details .event-button { min-height:44px; padding:8px 12px; font-size:16px; }
+  #details.walima-details .event-button svg { width:18px; height:18px; }
+  /* [CARD SIZE] space above the contact section */
+  #details.walima-details .contacts { margin-top:26px; }
+}
+
 </style>
 </head>
 <body>
@@ -632,15 +752,18 @@ body.urdu #details.walima-details .details-eyebrow,body.urdu #details.walima-det
 </div>
 <!-- ===================== HERO ===================== -->
 <section id="hero">
+  <!-- [BORDER TWEAK] HERO (page 1) ARCH BORDER SVG.
+       Mobile width is controlled in the CSS block "[BORDER TWEAK] MOBILE BORDER". -->
   <svg class="hero-decoration" viewBox="0 0 1200 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false">
     <defs><pattern id="hero-geometric" width="60" height="60" patternUnits="userSpaceOnUse">
       <path d="M30 0 40 20 60 30 40 40 30 60 20 40 0 30 20 20Z M0 0 60 60 M60 0 0 60" fill="none" stroke="currentColor" stroke-width=".7"/>
       <rect x="9" y="9" width="42" height="42" transform="rotate(45 30 30)" fill="none" stroke="currentColor" stroke-width=".7"/>
     </pattern><mask id="hero-border-mask"><rect width="1200" height="1000" fill="white"/><path d="M100 1000 V530 L130 495 V250 Q130 150 220 135 Q235 20 410 20 H790 Q965 20 980 135 Q1070 150 1070 250 V495 L1100 530 V1000Z" fill="black"/></mask></defs>
     <rect width="1200" height="1000" fill="url(#hero-geometric)" opacity=".28" mask="url(#hero-border-mask)"/>
-    
-    <path d="M100 1000 V530 L130 495 V250 Q130 150 220 135 Q235 20 410 20 H790 Q965 20 980 135 Q1070 150 1070 250 V495 L1100 530 V1000" fill="none" stroke="currentColor" stroke-width="1.5"/>
-    <path d="M108 1000 V534 L138 499 V250 Q138 158 228 143 Q243 28 410 28 H790 Q957 28 972 143 Q1062 158 1062 250 V499 L1092 534 V1000" fill="none" stroke="currentColor" stroke-width=".6" opacity=".6"/>
+    <!-- [BORDER TWEAK] outer (main) arch line -->
+    <path class="arch-line-main" d="M100 1000 V530 L130 495 V250 Q130 150 220 135 Q235 20 410 20 H790 Q965 20 980 135 Q1070 150 1070 250 V495 L1100 530 V1000" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <!-- [BORDER TWEAK] inner (thin) arch line -->
+    <path class="arch-line-inner" d="M108 1000 V534 L138 499 V250 Q138 158 228 143 Q243 28 410 28 H790 Q957 28 972 143 Q1062 158 1062 250 V499 L1092 534 V1000" fill="none" stroke="currentColor" stroke-width=".6" opacity=".6"/>
   </svg>
   <svg class="foliage left" id="foliageLeft" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" stroke="#93A98D" stroke-width="2" opacity=".8">
@@ -705,15 +828,22 @@ body.urdu #details.walima-details .details-eyebrow,body.urdu #details.walima-det
 <!-- ===================== DETAILS ===================== -->
 <section id="details" class="walima-details">
 
+  <!-- [BORDER TWEAK] DETAILS / WALIMA (page 2) ARCH BORDER SVG.
+       Same shape as the hero one on laptop/desktop. On phones this SVG
+       only draws the background pattern; the arch lines are replaced by a
+       CSS arch, see "[BORDER TWEAK] PAGE 2" in the CSS. -->
   <svg class="details-decoration" viewBox="0 0 1200 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false">
     <defs><pattern id="walima-geometric" width="60" height="60" patternUnits="userSpaceOnUse">
       <path d="M30 0 40 20 60 30 40 40 30 60 20 40 0 30 20 20Z M0 0 60 60 M60 0 0 60" fill="none" stroke="currentColor" stroke-width=".7"/>
       <rect x="9" y="9" width="42" height="42" transform="rotate(45 30 30)" fill="none" stroke="currentColor" stroke-width=".7"/>
     </pattern></defs>
     <rect width="1200" height="1000" fill="url(#walima-geometric)" opacity=".28"/>
+    <!-- [BORDER TWEAK] filled area inside the arch (hides the pattern behind the content) -->
     <path class="details-arch-fill" d="M100 1000 V530 L130 495 V250 Q130 150 220 135 Q235 20 410 20 H790 Q965 20 980 135 Q1070 150 1070 250 V495 L1100 530 V1000Z"/>
-    <path d="M100 1000 V530 L130 495 V250 Q130 150 220 135 Q235 20 410 20 H790 Q965 20 980 135 Q1070 150 1070 250 V495 L1100 530 V1000" fill="none" stroke="currentColor" stroke-width="1.5"/>
-    <path d="M108 1000 V534 L138 499 V250 Q138 158 228 143 Q243 28 410 28 H790 Q957 28 972 143 Q1062 158 1062 250 V499 L1092 534 V1000" fill="none" stroke="currentColor" stroke-width=".6" opacity=".6"/>
+    <!-- [BORDER TWEAK] outer (main) arch line -->
+    <path class="arch-line-main" d="M100 1000 V530 L130 495 V250 Q130 150 220 135 Q235 20 410 20 H790 Q965 20 980 135 Q1070 150 1070 250 V495 L1100 530 V1000" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <!-- [BORDER TWEAK] inner (thin) arch line -->
+    <path class="arch-line-inner" d="M108 1000 V534 L138 499 V250 Q138 158 228 143 Q243 28 410 28 H790 Q957 28 972 143 Q1062 158 1062 250 V499 L1092 534 V1000" fill="none" stroke="currentColor" stroke-width=".6" opacity=".6"/>
   </svg>
   <div class="details-inner">
     <div class="details-eyebrow reveal"
